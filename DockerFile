@@ -1,0 +1,15 @@
+FROM openjdk:17
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+RUN ./mvnw dependency.resilvo
+
+COPY src src
+RUN ./mvnw package
+
+FROM openjdk:17
+WORKDIR warehouse
+COPY --from=build target/account-0.0.1-SNAPSHOT.jar account.jar
+
+#ENTRYPOINT ["java","-jar","account.jar"]
+ENTRYPOINT ["java", "-jar", "/APPLICATION.JAR"]
+
